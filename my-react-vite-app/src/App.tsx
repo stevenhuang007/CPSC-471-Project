@@ -1,10 +1,21 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./layout";
+import Home from "./pages/home";
+import PlayerStats from "./pages/playerstats";
+import Information from "./pages/information";
 
 function App() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="playerstats" element={<PlayerStats />} />
+          <Route path="information" element={<Information />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
