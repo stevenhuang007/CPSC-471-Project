@@ -9,7 +9,7 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, Outlet, useLocation } from "react-router-dom"; // Import useLocation
-import logo from "./assets/images/logo-transparent-svg.svg";
+import logo from "./assets/images/logo-transparent-svg (1).svg";
 
 const navigation = [
   { name: "Home", href: "/" },
