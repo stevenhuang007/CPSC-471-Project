@@ -24,8 +24,17 @@ function PlayerStats() {
                 <option value=""> None...</option>
                 <option value="MGM Grand">MGM Grand</option>
                 <option value="Ceasers">Ceasers</option>
-                <option value="Vedara">Vedara</option>
+                <option value="Venetian">Venetian</option>
+                <option value="Bellagio">Bellagio</option>
+                <option value="Renaissance">Renaissance</option>
+                <option value="Excalibur">Excalibur</option>
+
               </select>
+            </div>
+            <div className = "flex justify-center items-center">
+              <p className="text-md mr-4 whitespace-nowrap w-max text-gray-600 italic">
+                please fill either a table game, a machine game or none (Only choose one)
+              </p>
             </div>
             {/* table games select*/}
             <div className="flex items-center">
@@ -48,6 +57,29 @@ function PlayerStats() {
                 <option value="Poker Machine">Poker Machine</option>
                 <option value="5 DRAGONS">5 DRAGONS</option>
               </select>
+            </div>
+            <div className = "flex justify-center items-center">
+              <p className="text-md mr-4 whitespace-nowrap w-max text-gray-600 italic">
+                Select a filter you would like to apply (multiple can be selected)
+              </p>
+            </div>
+            {/* Specifc statistic select*/}
+            <div className="flex items-center">
+              <label htmlFor = "Select Specifc statistic" className ="text-md mr-4 whitespace-nowrap w-1/3">Select Specifc statistic</label>
+              <div className="grid grid-cols-1 gap-2 w-2/3">
+                <label className="flex items-center">
+                  <input type="checkbox" id="amount-won" name="specific-statistic" value="Amount won" className="mr-2" />
+                  Amount Won
+                </label>
+                <label className="flex items-center">
+                  <input type="checkbox" id="winning-hand" name="specific-statistic" value="Winning Hand" className="mr-2 whitespace-nowrap" />
+                  Winning Hand (certain table/machine games)
+                </label>
+                <label className="flex items-center">
+                  <input type="checkbox" id="poker-machine" name="specific-statistic" value="Number of Games Played" className="mr-2" />
+                  Number of Games Played
+                </label>
+              </div>
             </div>
           </div>
         </div>
