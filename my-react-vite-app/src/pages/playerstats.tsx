@@ -63,6 +63,11 @@ function PlayerStats() {
                 Select a filter you would like to apply (multiple can be selected)
               </p>
             </div>
+            <div className = "flex justify-center items-center">
+              <p className="text-md mr-4 whitespace-nowrap w-max text-gray-600 italic">
+                (if none selected all will be applied)
+              </p>
+            </div>
             {/* Specifc statistic select*/}
             <div className="flex items-center">
               <label htmlFor = "Select Specifc statistic" className ="text-md mr-4 whitespace-nowrap w-1/3">Select Specifc statistic</label>
