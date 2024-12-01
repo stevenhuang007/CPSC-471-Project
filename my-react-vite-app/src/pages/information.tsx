@@ -25,18 +25,52 @@ function Information() {
                 <option value="">Select...</option>
                 <option value="table1">Table 1</option>
                 <option value="table2">Table 2</option>
+                <option value="table2">Table 3</option>
+                <option value="table2">Table 4</option>
                 <option value="machine1">Machine 1</option>
                 <option value="machine2">Machine 2</option>
+                <option value="machine2">Machine 3</option>
+                <option value="machine2">Machine 4</option>
               </select>
             </div>
-
+{/*Fill out the following information
+Plays at either table or machine (Dropdown selection)
+Enters table ID or machine ID (Dropdown selection)
+Amount bet
+Amount won/loss 
+Dealer ID(N/a if machine is selected)
+Date
+Submit button
+*/}
             {/* Label and Text Box (Hand Result) */}
             <div className="flex items-center">
-              <label htmlFor="hand-result" className="text-lg mr-4">Hand Result:</label>
+              <label htmlFor="hand-result" className="text-lg mr-4">Enter Machine/Table ID:</label>
               <input
                 type="text"
                 id="hand-result"
-                className="p-2 border border-gray-300 rounded-md w-full"
+                className="p-2 border border-gray-300 rounded-md w-auto"
+                placeholder="Enter hand result"
+              />
+            </div>
+            
+            {/* Label and Text Box (Amount Bet) */}
+            <div className="flex items-center">
+              <label htmlFor="hand-result" className="text-lg mr-4">Enter Amount Bet:</label>
+              <input
+                type="text"
+                id="hand-result"
+                className="p-2 border border-gray-300 rounded-md w-auto"
+                placeholder="Enter hand result"
+              />
+            </div>
+
+            {/* Label and Text Box (Amount Bet) */}
+            <div className="flex items-center">
+              <label htmlFor="hand-result" className="text-lg mr-4">Enter Amount Won/Loss:</label>
+              <input
+                type="text"
+                id="hand-result"
+                className="p-2 border border-gray-300 rounded-md w-auto"
                 placeholder="Enter hand result"
               />
             </div>
