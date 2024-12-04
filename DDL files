@@ -1,0 +1,84 @@
+CREATE TABLE `budget_tracker` (
+  `Financial_Plan` int NOT NULL,
+  `Player_ID` varchar(255) DEFAULT NULL,
+  `Notification_Type` int DEFAULT NULL,
+  `Total_Budget` int DEFAULT NULL,
+  `Saving_Goal` int DEFAULT NULL,
+  PRIMARY KEY (`Financial_Plan`),
+  KEY `Player_ID_idx` (`Player_ID`),
+  CONSTRAINT `Player_BudgetTracker` FOREIGN KEY (`Player_ID`) REFERENCES `player` (`Player_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `game_performance` (
+  `Game` int NOT NULL,
+  `Player_ID` varchar(255) DEFAULT NULL,
+  `Table_ID` varchar(255) DEFAULT NULL,
+  `Winning_Hands` varchar(255) DEFAULT NULL,
+  `Amount_Won` int DEFAULT NULL,
+  PRIMARY KEY (`Game`),
+  KEY `player_GP_idx` (`Player_ID`),
+  KEY `table_GP_idx` (`Table_ID`),
+  CONSTRAINT `player_GP` FOREIGN KEY (`Player_ID`) REFERENCES `player` (`Player_ID`),
+  CONSTRAINT `table_GP` FOREIGN KEY (`Table_ID`) REFERENCES `table_game` (`Table_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `machine` (
+  `Machine_ID` varchar(255) NOT NULL,
+  `Name` varchar(255) DEFAULT NULL,
+  `Game_Type` varchar(255) DEFAULT NULL,
+  `Minimum_Bet` int DEFAULT NULL,
+  `Number_of_Games` int DEFAULT NULL,
+  `Limit` int DEFAULT NULL,
+  PRIMARY KEY (`Machine_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `physical_casino` (
+  `Name` varchar(255) NOT NULL,
+  `Machine_ID` varchar(255) DEFAULT NULL,
+  `Operating_Time` varchar(255) DEFAULT NULL,
+  `Size` varchar(255) DEFAULT NULL,
+  `Location` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Name`),
+  KEY `Machine_ID_idx` (`Machine_ID`),
+  CONSTRAINT `Machine_AtCasino` FOREIGN KEY (`Machine_ID`) REFERENCES `machine` (`Machine_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `player` (
+  `Player_ID` varchar(255) NOT NULL,
+  `Phone` varchar(10) DEFAULT NULL,
+  `Birth_Date` date DEFAULT NULL,
+  `Total_Winnings` decimal(10,2) DEFAULT NULL,
+  `Machine_Winnings` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`Player_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `player_playsat_machine` (
+  `Player_ID` varchar(255) NOT NULL,
+  `Machine_ID` varchar(255) NOT NULL,
+  PRIMARY KEY (`Player_ID`,`Machine_ID`),
+  KEY `Machine_ID_idx` (`Machine_ID`),
+  CONSTRAINT `machine_playerIsAt` FOREIGN KEY (`Machine_ID`) REFERENCES `machine` (`Machine_ID`),
+  CONSTRAINT `player_playsat` FOREIGN KEY (`Player_ID`) REFERENCES `player` (`Player_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `spending_alert` (
+  `Spending_Limit` int NOT NULL,
+  `Player_ID` varchar(255) DEFAULT NULL,
+  `Finaincal_Plam` int DEFAULT NULL,
+  PRIMARY KEY (`Spending_Limit`),
+  KEY `player_SpendingAlert_idx` (`Player_ID`),
+  KEY `spendingAlert_Financial_idx` (`Finaincal_Plam`),
+  CONSTRAINT `player_SpendingAlert` FOREIGN KEY (`Player_ID`) REFERENCES `player` (`Player_ID`),
+  CONSTRAINT `spendingAlert_Financial` FOREIGN KEY (`Finaincal_Plam`) REFERENCES `budget_tracker` (`Financial_Plan`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `table_game` (
+  `Table_ID` varchar(255) NOT NULL,
+  `Name` varchar(255) DEFAULT NULL,
+  `Limit` int DEFAULT NULL,
+  `Minimum_Bet` int DEFAULT NULL,
+  `Type_of_Game` varchar(255) DEFAULT NULL,
+  `Rounds_Played` int DEFAULT NULL,
+  `Win_Condition` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Table_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='	
