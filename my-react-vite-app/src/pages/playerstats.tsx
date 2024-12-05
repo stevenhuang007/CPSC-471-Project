@@ -1,4 +1,22 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 function PlayerStats() {
+  const [playerStats, setplayerStats] = useState([])
+
+  useEffect(()=>{
+    const fetchAllPS = async()=>{
+      try{
+        const res = await axios.get("http://localhost:8800/player")
+        console.log(res)
+      }catch(err){
+        console.log(err)
+      }
+      
+    }
+    fetchAllPS()
+  },[])
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-4">Player Stats</h1>
