@@ -38,7 +38,6 @@ app.post("/player", (req,res)=>{
     req.body.Birth_Date,
     req.body.Total_Winnings,
     req.body.Machine_Winnings,
-  
   ]
 
   db.query(q, [values], (err,data)=>{
