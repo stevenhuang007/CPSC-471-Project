@@ -13,6 +13,8 @@ const db = mysql.createConnection({
   //   database: "test", enter database name here
 });
 
+app.use(express.json())
+
 app.get("/", (req, res) => {
   res.json("hello this is the backend");
 });
@@ -29,12 +31,19 @@ app.get("/player", (req, res) => {
 });
 
 app.post("/player", (req,res)=>{
-  const q = "INSERT INTO player ('Player_ID','Phone','Birth_Date','Total_Winnings','Machine_Winnings') VALUES (?)"
-  const values = ["2","5874360788","20030721","10000.69","0.69",]
+  const q = "INSERT INTO player (`Player_ID`,`Phone`,`Birth_Date`,`Total_Winnings`,`Machine_Winnings`) VALUES (?)"
+  const values = [
+    req.body.Player_ID,
+    req.body.Phone,
+    req.body.Birth_Date,
+    req.body.Total_Winnings,
+    req.body.Machine_Winnings,
+  
+  ]
 
   db.query(q, [values], (err,data)=>{
     if (err) return res.json(err);
-    return res.json(data);
+    return res.json("inserted player");
   });
 });
 
