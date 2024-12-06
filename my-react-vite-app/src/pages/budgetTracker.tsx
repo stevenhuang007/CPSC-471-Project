@@ -20,7 +20,7 @@ const BudgetTracker: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/transactions")
+      .get("http://localhost:8800/tracker")
       .then((response) => setTransactions(response.data))
       .catch((error) => console.error("Error fetching transactions:", error));
   }, []);
@@ -28,7 +28,7 @@ const BudgetTracker: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/transactions", {
+      .post("http://localhost:8800/tracker", {
         ...formData,
         Amount: parseInt(formData.Amount),
       })
