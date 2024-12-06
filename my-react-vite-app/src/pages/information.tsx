@@ -13,26 +13,60 @@ const Information = () => {
     date: "",
   });
 
+  const [error, setError] = useState(""); // State for error message
+  const [confirmation, setConfirmation] = useState(""); // State for confirmation message
+  const navigate = useNavigate();
+
   const handleChange = (e: { target: { name: any; value: any; }; }) => {
-    setHandInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+    const { name, value } = e.target;
 
-  const navigate = useNavigate()
-
-  const handleClick = async (e: { preventDefault: () => void; }) =>{
-    e.preventDefault()
-    try{
-      await axios.post("http://localhost:8800/hand_info",hand_info)
-      navigate("/")
-    }catch(err){
-      console.log(err)
+    // Validate `amount_bet` input to allow only positive integers
+    if (name === "amount_bet" && (value === "" || !/^\d+$/.test(value))) {
+      setError("Amount Bet must be a positive integer.");
+      setHandInfo((prev) => ({ ...prev, [name]: "" })); // Clear invalid value
+      return;
     }
 
-  }
-  console.log(hand_info)
+    setError(""); // Clear any error if input is valid
+    setHandInfo((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validateForm = () => {
+    const { casino, table_id, game, amount_bet, amount_won_loss, date } = hand_info;
+
+    if (!casino || !table_id || !game || !amount_bet || !amount_won_loss || !date) {
+      return "All fields except Dealer ID must be filled out.";
+    }
+
+    if (parseInt(amount_bet, 10) <= 0) {
+      return "Invalid bet. Amount Bet must be greater than zero.";
+    }
+
+    return "";
+  };
+
+  const handleClick = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    const errorMessage = validateForm();
+    if (errorMessage) {
+      setError(errorMessage); // Set error message if validation fails
+      return;
+    }
+    setError(""); // Clear error if validation passes
+    try {
+      await axios.post("http://localhost:8800/hand_info", hand_info);
+      setConfirmation("Data entry complete!"); // Set confirmation message
+      setTimeout(() => {
+        navigate("/"); // Redirect after showing message
+      }, 2000); // Redirect after 2 seconds
+    } catch (err) {
+      console.log(err);
+      setError("An error occurred while submitting the form. Please try again.");
+    }
+  };
+
   return (
     <div className="min-h-screen p-6">
-      {/* Section for Header and Intro Text */}
       <div>
         <h1 className="text-3xl font-bold mb-4">Enter Hand Information</h1>
         <p className="text-lg">
@@ -40,12 +74,24 @@ const Information = () => {
         </p>
       </div>
 
-      {/* Centered Grid Layout */}
+      {/* Error Message Display */}
+      {error && (
+        <div className="bg-red-200 text-red-800 p-4 rounded-md mb-4">
+          {error}
+        </div>
+      )}
+
+      {/* Confirmation Message Display */}
+      {confirmation && (
+        <div className="bg-green-200 text-green-800 p-4 rounded-md mb-4">
+          {confirmation}
+        </div>
+      )}
+
       <div className="flex justify-center mt-6">
         <div className="w-full max-w-xl">
           <div className="grid grid-cols-2 gap-4 items-center mt-5">
-            
-            {/* Label and Dropdown (Enter Casino) */}
+            {/* Form inputs and labels */}
             <label htmlFor="casino" className="text-lg mr-4">Enter Casino:</label>
             <select
               onChange={handleChange}
@@ -61,7 +107,6 @@ const Information = () => {
               <option value="casino5">Casino 5</option>
             </select>
 
-            {/* Label and Dropdown (Enter Table or Machine ID) */}
             <label htmlFor="table-machine" className="text-lg mr-4">Enter Table or Machine ID:</label>
             <select
               onChange={handleChange}
@@ -79,7 +124,7 @@ const Information = () => {
               <option value="machine3">Machine 3</option>
               <option value="machine4">Machine 4</option>
             </select>
-            
+
             <label htmlFor="game" className="text-lg mr-4">Enter Game:</label>
             <select
               onChange={handleChange}
@@ -96,19 +141,18 @@ const Information = () => {
               <option value="roulette">Roulette</option>
               <option value="slots">Slots</option>
             </select>
-            
-            {/* Label and Text Box (Amount Bet) */}
+
             <label htmlFor="amount-bet" className="text-lg mr-4">Enter Amount Bet:</label>
             <input
               onChange={handleChange}
               name="amount_bet"
-              type="number"
+              type="text" // Use "text" for better input validation control
               id="amount-bet"
               className="p-2 border border-gray-300 rounded-md w-60"
               placeholder="Bet Amount (ex: 5, 10)"
+              value={hand_info.amount_bet}
             />
 
-            {/* Label and Text Box (Amount Won/Loss) */}
             <label htmlFor="amount-w-l" className="text-lg mr-4">Enter Amount Won/Loss:</label>
             <input
               onChange={handleChange}
@@ -119,7 +163,6 @@ const Information = () => {
               placeholder="Winnings/Losings (ex: 5, -5)"
             />
 
-            {/* Label and Text Box (Dealer ID) */}
             <label htmlFor="dealer-id" className="text-lg mr-4">Enter Dealer ID (N/a if machine used):</label>
             <input
               onChange={handleChange}
@@ -130,7 +173,6 @@ const Information = () => {
               placeholder="Dealer ID (N/a if Machine)"
             />
 
-            {/* Label and Text Box (Date) */}
             <label htmlFor="date" className="text-lg mr-4">Enter Date:</label>
             <input
               onChange={handleChange}
@@ -144,10 +186,10 @@ const Information = () => {
           <div className="flex justify-center mt-10">
             <button onClick={handleClick} className="bg-green-400 border-4 border-gray-600 p-2 hover:opacity-80 rounded-full">Submit</button>
           </div>
-        </div>  
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default Information;
