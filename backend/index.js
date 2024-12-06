@@ -46,6 +46,46 @@ app.post("/player", (req,res)=>{
   });
 });
 
+app.get("/hand_info", (req, res) => {
+  const q = "SELECT * FROM hand_info";
+  db.query(q, (err, data) => {
+    if (err) {
+      console.error("Query Error:", err); // Log detailed error
+      return res.status(500).json({ error: "Database query failed", details: err });
+    }
+    return res.json(data);
+  });
+});
+
+app.get("/hand_info", (req, res) => {
+  const q = "SELECT * FROM hand_info";
+  db.query(q, (err, data) => {
+    if (err) {
+      console.error("Query Error:", err); // Log detailed error
+      return res.status(500).json({ error: "Database query failed", details: err });
+    }
+    return res.json(data);
+  });
+});
+
+app.post("/hand_info", (req,res)=>{
+  const q = "INSERT INTO hand_info (`casino`,`table_id`,`game`,`amount_bet`,`amount_won_loss`,`dealer_id`,`date`) VALUES (?)"
+  const values = [
+    req.body.casino,
+    req.body.table_id,
+    req.body.game,
+    req.body.amount_bet,
+    req.body.amount_won_loss,
+    req.body.dealer_id,
+    req.body.date,
+  ]
+
+  db.query(q, [values], (err,data)=>{
+    if (err) return res.json(err);
+    return res.json("inserted hand info");
+  });
+});
+
 app.listen(8800, () => {
   console.log("Connected to backend!");
 });
