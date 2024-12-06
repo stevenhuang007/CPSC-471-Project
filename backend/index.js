@@ -107,7 +107,7 @@ app.get("/tracker", (req, res) => {
   });
 });
 
-app.post("/transactions", (req, res) => {
+app.post("/tracker", (req, res) => {
   const { Casino_name, Description, Amount, Date } = req.body;
   const query =
     "INSERT INTO tracker (Casino_name, Description, Amount, Date) VALUES (?, ?, ?, ?)";
