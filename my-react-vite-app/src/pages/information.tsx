@@ -13,13 +13,13 @@ const Information = () => {
     date: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: { target: { name: any; value: any; }; }) => {
     setHandInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const navigate = useNavigate()
 
-  const handleClick = async e =>{
+  const handleClick = async (e: { preventDefault: () => void; }) =>{
     e.preventDefault()
     try{
       await axios.post("http://localhost:8800/hand_info",hand_info)
