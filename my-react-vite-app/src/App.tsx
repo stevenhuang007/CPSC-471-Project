@@ -3,6 +3,7 @@ import Layout from "./layout";
 import Home from "./pages/home";
 import PlayerStats from "./pages/playerstats";
 import Information from "./pages/information";
+import BudgetTracker from "./pages/budgetTracker";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="playerstats" element={<PlayerStats />} />
           <Route path="information" element={<Information />} />
+          <Route path="budgetTracker" element={<BudgetTracker />} />
         </Route>
       </Routes>
     </Router>
