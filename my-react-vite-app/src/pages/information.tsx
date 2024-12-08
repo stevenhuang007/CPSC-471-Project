@@ -9,7 +9,6 @@ const Information = () => {
     game: "",
     amount_bet: "",
     amount_won_loss: "",
-    dealer_id: "",
     date: "",
   });
 
@@ -161,16 +160,6 @@ const Information = () => {
               id="amount-w-l"
               className="p-2 border border-gray-300 rounded-md w-60"
               placeholder="Winnings/Losings (ex: 5, -5)"
-            />
-
-            <label htmlFor="dealer-id" className="text-lg mr-4">Enter Dealer ID (N/a if machine used):</label>
-            <input
-              onChange={handleChange}
-              name="dealer_id"
-              type="number"
-              id="dealer-id"
-              className="p-2 border border-gray-300 rounded-md w-60"
-              placeholder="Dealer ID (N/a if Machine)"
             />
 
             <label htmlFor="date" className="text-lg mr-4">Enter Date:</label>
