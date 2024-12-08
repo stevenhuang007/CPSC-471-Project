@@ -49,7 +49,17 @@ app.post("/player", (req, res) => {
 });
 
 app.get("/hand_info", (req, res) => {
-  const q = "SELECT * FROM hand_info";
+  const q = `
+    SELECT 
+      casino, 
+      table_id, 
+      game, 
+      amount_bet, 
+      amount_won_loss, 
+      dealer_id, 
+      DATE_FORMAT(date, '%Y-%m-%d') AS date
+    FROM hand_info
+  `;
   db.query(q, (err, data) => {
     if (err) {
       console.error("Query Error:", err); // Log detailed error
@@ -86,7 +96,17 @@ app.get("/tracker", (req, res) => {
   const limit = 4; // Set the limit to 4 entries per page
   const offset = (page - 1) * limit; // Calculate the offset based on the current page
 
-  const query = `SELECT Id, Casino_name, Description, Amount, Date FROM tracker ORDER BY Date DESC LIMIT ${limit} OFFSET ${offset}`;
+  const query = `
+    SELECT 
+      Id, 
+      Casino_name, 
+      Description, 
+      Amount, 
+      DATE_FORMAT(Date, '%Y-%m-%d') AS Date 
+    FROM tracker 
+    ORDER BY Date DESC 
+    LIMIT ${limit} OFFSET ${offset}
+  `;
 
   db.query(query, (err, results) => {
     if (err) {
@@ -153,7 +173,6 @@ app.get("/tracker/summary", (req, res) => {
     res.json(data[0]);
   });
 });
-
 
 app.listen(8800, () => {
   console.log("Connected to backend!");
