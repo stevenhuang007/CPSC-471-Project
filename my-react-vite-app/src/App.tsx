@@ -4,6 +4,7 @@ import Home from "./pages/home";
 import PlayerStats from "./pages/playerstats";
 import Information from "./pages/information";
 import BudgetTracker from "./pages/budgetTracker";
+import Test from "./pages/test"
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="playerstats" element={<PlayerStats />} />
           <Route path="information" element={<Information />} />
           <Route path="budgetTracker" element={<BudgetTracker />} />
+          <Route path="test" element={<Test/>}/>
         </Route>
       </Routes>
     </Router>
