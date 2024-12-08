@@ -80,15 +80,37 @@ app.post("/hand_info", (req, res) => {
   });
 });
 
+// Pagination logic for fetching transactions
 app.get("/tracker", (req, res) => {
-  const query =
-    "SELECT Id, Casino_name, Description, Amount, Date FROM tracker ORDER BY Date DESC";
+  const page = parseInt(req.query.page) || 1; // Default to page 1
+  const limit = 4; // Set the limit to 4 entries per page
+  const offset = (page - 1) * limit; // Calculate the offset based on the current page
+
+  const query = `SELECT Id, Casino_name, Description, Amount, Date FROM tracker ORDER BY Date DESC LIMIT ${limit} OFFSET ${offset}`;
+
   db.query(query, (err, results) => {
     if (err) {
       console.error("Error fetching transactions:", err);
       res.status(500).send("Error fetching transactions");
     } else {
-      res.json(results);
+      // Get the total number of transactions for pagination
+      const countQuery = "SELECT COUNT(*) AS total FROM tracker";
+      db.query(countQuery, (err, countResult) => {
+        if (err) {
+          console.error("Error fetching total transactions count:", err);
+          res.status(500).send("Error fetching total transactions count");
+        } else {
+          const totalTransactions = countResult[0].total;
+          const totalPages = Math.ceil(totalTransactions / limit);
+
+          res.json({
+            data: results,
+            currentPage: page,
+            totalPages,
+            totalTransactions,
+          });
+        }
+      });
     }
   });
 });
@@ -110,6 +132,7 @@ app.post("/tracker", (req, res) => {
   });
 });
 
+// Summary data for tracker
 app.get("/tracker/summary", (req, res) => {
   const q = `
     SELECT

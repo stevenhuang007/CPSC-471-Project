@@ -25,12 +25,17 @@ const BudgetTracker: React.FC = () => {
     Amount: "",
     Date: "",
   });
+  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const [totalPages, setTotalPages] = useState(1); // Track total pages
 
   useEffect(() => {
-    // Fetch transactions
+    // Fetch transactions based on current page
     axios
-      .get("http://localhost:8800/tracker")
-      .then((response) => setTransactions(response.data))
+      .get(`http://localhost:8800/tracker?page=${currentPage}&limit=4`) // Fetch 4 entries per page
+      .then((response) => {
+        setTransactions(response.data.data);
+        setTotalPages(response.data.totalPages);
+      })
       .catch((error) => console.error("Error fetching transactions:", error));
 
     // Fetch summary data
@@ -38,7 +43,7 @@ const BudgetTracker: React.FC = () => {
       .get("http://localhost:8800/tracker/summary")
       .then((response) => setSummary(response.data))
       .catch((error) => console.error("Error fetching summary:", error));
-  }, []);
+  }, [currentPage]); // Re-fetch when currentPage changes
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,29 +74,45 @@ const BudgetTracker: React.FC = () => {
     return `$${amount}`;
   };
 
+  // Handle page changes
+  const changePage = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Gambling Tracker</h1>
 
       {/* Summary Section */}
       {summary && (
-        <div className="bg-gray-100 p-4 mb-6 rounded shadow">
-          <h2 className="text-xl font-semibold mb-4">Summary</h2>
-          <p>
-            <strong>Most Visited Casino:</strong>{" "}
-            {summary.most_visited_casino || "N/A"}
-          </p>
-          <p>
-            <strong>Most Played Game:</strong>{" "}
-            {summary.most_played_game || "N/A"}
-          </p>
-          <p>
-            <strong>Total Won:</strong> {formatAmount(summary.total_won || 0)}
-          </p>
-          <p>
-            <strong>Total Lost:</strong>{" "}
-            {formatAmount(Math.abs(summary.total_lost || 0))}
-          </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          {/* Most Visited Casino */}
+          <div className="bg-blue-500 text-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+            <h3 className="text-lg font-semibold">Most Visited Casino</h3>
+            <p className="text-sm">{summary.most_visited_casino || "N/A"}</p>
+          </div>
+
+          {/* Most Played Game */}
+          <div className="bg-teal-500 text-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+            <h3 className="text-lg font-semibold">Most Played Game</h3>
+            <p className="text-sm">{summary.most_played_game || "N/A"}</p>
+          </div>
+
+          {/* Total Won */}
+          <div className="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+            <h3 className="text-lg font-semibold">Total Won</h3>
+            <p className="text-sm">{formatAmount(summary.total_won || 0)}</p>
+          </div>
+
+          {/* Total Lost */}
+          <div className="bg-red-500 text-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+            <h3 className="text-lg font-semibold">Total Lost</h3>
+            <p className="text-sm">
+              {formatAmount(Math.abs(summary.total_lost || 0))}
+            </p>
+          </div>
         </div>
       )}
 
@@ -151,7 +172,7 @@ const BudgetTracker: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300"
         >
           Add Transaction
         </button>
@@ -160,16 +181,44 @@ const BudgetTracker: React.FC = () => {
       {/* Transactions */}
       <ul>
         {transactions.map((transaction) => (
-          <li key={transaction.Id} className="border p-4 rounded mb-4">
+          <li
+            key={transaction.Id}
+            className="border p-4 rounded mb-4 hover:shadow-lg transition duration-300"
+          >
             <p className="text-lg font-semibold">{transaction.Casino_name}</p>
             <p className="text-sm text-gray-600">{transaction.Description}</p>
-            <p className="text-sm">
+            <p
+              className={`text-sm ${
+                transaction.Amount < 0 ? "text-red-600" : "text-green-600"
+              } font-semibold`}
+            >
               Amount: {formatAmount(transaction.Amount)}
             </p>
             <p className="text-sm">Date: {transaction.Date}</p>
           </li>
         ))}
       </ul>
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={() => changePage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span className="mx-4">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => changePage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
