@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 const PlayerStats = () => {
   const [players, setplayerStats] = useState([])
   const [physical_casino, setPS] = useState([])
+  
 
   useEffect(()=>{
     const fetchAllPS = async()=>{
@@ -44,84 +45,76 @@ const PlayerStats = () => {
       
              
       </div>
-      {/*Centered box*/}
-      <div className="flex justify-center mt-6">
-        <div className ="w-full max-w-xl">
-          <div className="grid grid-cols-1 gap-6">
-          {/* Casino select select*/}
-           <div className="flex item-center">
-              <label htmlFor="Select Casino" className="text-md mr-4 whitespace-nowrap w-1/3">Select Casino</label>
-              <select id="Select Casino" className="p-2 border border-gray-300 rounded-md w-2/3">
-                <option value=""> None...</option>
-                <option value="MGM Grand">MGM Grand</option>
-                <option value="Ceasers">Ceasers</option>
-                <option value="Venetian">Venetian</option>
-                <option value="Bellagio">Bellagio</option>
-                <option value="Renaissance">Renaissance</option>
-                <option value="Excalibur">Excalibur</option>
-
-              </select>
-            </div>
-            <div className = "flex justify-center items-center">
-              <p className="text-md mr-4 whitespace-nowrap w-max text-gray-600 italic">
-                please fill either a table game, a machine game or none (Only choose one)
-              </p>
-            </div>
-            {/* table games select*/}
-            <div className="flex items-center">
-              <label htmlFor = "Select Table Game" className ="text-md mr-4 whitespace-nowrap w-1/3">Select Table Game</label>
-              <select id="Select Casino" className="p-2 border border-gray-300 rounded-md w-2/3">
-                <option value=""> None...</option>
-                <option value="Roulette">Roulette</option>
-                <option value="Black Jack">Black Jack</option>
-                <option value="Poker">Poker</option>
-                <option value="Baccarat">Baccarat</option>
-                <option value="craps">Craps</option>
-                <option value="texas_holdem">Texas Hold'em</option>
-              </select>
-            </div>
-            {/* Machine games select*/}
-            <div className="flex items-center">
-              <label htmlFor = "Select Machine Game" className ="text-md mr-4 whitespace-nowrap w-1/3">Select Machine Game</label>
-              <select id="Select Casino" className="p-2 border border-gray-300 rounded-md w-2/3">
-                <option value=""> None...</option>
-                <option value="Slotomania">Slotomania</option>
-                <option value="Roulette Machine">Roulette Machine</option>
-                <option value="Poker Machine">Poker Machine</option>
-                <option value="5 DRAGONS">5 DRAGONS</option>
-              </select>
-            </div>
-            <div className = "flex justify-center items-center">
-              <p className="text-md mr-4 whitespace-nowrap w-max text-gray-600 italic">
-                Select a filter you would like to apply (multiple can be selected)
-              </p>
-            </div>
-            <div className = "flex justify-center items-center">
-              <p className="text-md mr-4 whitespace-nowrap w-max text-gray-600 italic">
-                (if none selected all will be applied)
-              </p>
-            </div>
-            {/* Specifc statistic select*/}
-            <div className="flex items-center">
-              <label htmlFor = "Select Specifc statistic" className ="text-md mr-4 whitespace-nowrap w-1/3">Select Specifc statistic</label>
-              <div className="grid grid-cols-1 gap-2 w-2/3">
-                <label className="flex items-center">
-                  <input type="checkbox" id="amount-won" name="specific-statistic" value="Amount won" className="mr-2" />
-                  Amount Won
-                </label>
-                <label className="flex items-center">
-                  <input type="checkbox" id="winning-hand" name="specific-statistic" value="Winning Hand" className="mr-2 whitespace-nowrap" />
-                  Winning Hand (certain table/machine games)
-                </label>
-                <label className="flex items-center">
-                  <input type="checkbox" id="poker-machine" name="specific-statistic" value="Number of Games Played" className="mr-2" />
-                  Number of Games Played
-                </label>
-              </div>
-            </div>
+{/* Centered box */}
+<div className="flex justify-center mt-6">
+  <div className="w-full max-w-xl">
+    <div className="grid grid-cols-1 gap-6">
+      
+      {/* Casino checkboxes */}
+      <div>
+        <h3 className="text-md font-bold mb-2">Select Casino</h3>
+        {["MGM Grand", "Ceasers", "Venetian", "Bellagio", "Renaissance", "Excalibur"].map((casino) => (
+          <div key={casino} className="mb-2">
+            <label className="flex items-center">
+              <input type="checkbox" value={casino} className="mr-2" />
+              {casino}
+            </label>
           </div>
-        </div>
+        ))}
       </div>
+
+      {/* Table games checkboxes */}
+      <div>
+        <h3 className="text-md font-bold mb-2">Select Table Game</h3>
+        {["Roulette", "Black Jack", "Poker", "Baccarat", "Craps", "Texas Hold'em"].map((game) => (
+          <div key={game} className="mb-2">
+            <label className="flex items-center">
+              <input type="checkbox" value={game} className="mr-2" />
+              {game}
+            </label>
+          </div>
+        ))}
+      </div>
+
+      {/* Machine games checkboxes */}
+      <div>
+        <h3 className="text-md font-bold mb-2">Select Machine Game</h3>
+        {["Slotomania", "Roulette Machine", "Poker Machine", "5 DRAGONS"].map((machine) => (
+          <div key={machine} className="mb-2">
+            <label className="flex items-center">
+              <input type="checkbox" value={machine} className="mr-2" />
+              {machine}
+            </label>
+          </div>
+        ))}
+      </div>
+
+      {/* Filters Section */}
+      <div className="text-center text-gray-600 italic">
+        <p>Select a filter you would like to apply (multiple can be selected).</p>
+        <p>(If none selected, all will be applied.)</p>
+      </div>
+
+      {/* Specific statistic checkboxes */}
+      <div>
+        <h3 className="text-md font-bold mb-2">Select Specific Statistic</h3>
+        {[
+          { id: "amount-won", label: "Amount Won" },
+          { id: "winning-hand", label: "Winning Hand (certain table/machine games)" },
+          { id: "number-games-played", label: "Number of Games Played" },
+        ].map((stat) => (
+          <div key={stat.id} className="mb-2">
+            <label className="flex items-center">
+              <input type="checkbox" id={stat.id} value={stat.label} className="mr-2" />
+              {stat.label}
+            </label>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
     </div>
   );
 }

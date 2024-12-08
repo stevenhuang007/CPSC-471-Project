@@ -10,7 +10,9 @@ import Home from "./pages/home";
 import PlayerStats from "./pages/playerstats";
 import Information from "./pages/information";
 import BudgetTracker from "./pages/budgetTracker";
+import Test from "./pages/test"
 import LoginPage from "./pages/loginpage";
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,6 +30,7 @@ function App() {
           <Route path="playerstats" element={<PlayerStats />} />
           <Route path="information" element={<Information />} />
           <Route path="budgetTracker" element={<BudgetTracker />} />
+          <Route path="test" element={<Test/>}/>
         </Route>
 
         {/* Login page route */}
