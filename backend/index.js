@@ -10,7 +10,6 @@ const db = mysql.createConnection({
   user: "root",
   password: "Davesburgers13!",
   database: "casino",
-  //   database: "test", enter database name here
 });
 
 app.use(express.json());
@@ -46,19 +45,6 @@ app.post("/player", (req, res) => {
   db.query(q, [values], (err, data) => {
     if (err) return res.json(err);
     return res.json("inserted player");
-  });
-});
-
-app.get("/hand_info", (req, res) => {
-  const q = "SELECT * FROM hand_info";
-  db.query(q, (err, data) => {
-    if (err) {
-      console.error("Query Error:", err); // Log detailed error
-      return res
-        .status(500)
-        .json({ error: "Database query failed", details: err });
-    }
-    return res.json(data);
   });
 });
 
@@ -121,6 +107,27 @@ app.post("/tracker", (req, res) => {
         id: results.insertId,
       });
     }
+  });
+});
+
+app.get("/tracker/summary", (req, res) => {
+  const q = `
+    SELECT
+      (SELECT Casino_name FROM tracker GROUP BY Casino_name ORDER BY COUNT(*) DESC LIMIT 1) AS most_visited_casino,
+      (SELECT Description FROM tracker GROUP BY Description ORDER BY COUNT(*) DESC LIMIT 1) AS most_played_game,
+      COALESCE(SUM(CASE WHEN Amount > 0 THEN Amount ELSE 0 END), 0) AS total_won,
+      COALESCE(SUM(CASE WHEN Amount < 0 THEN Amount ELSE 0 END), 0) AS total_lost
+    FROM tracker
+  `;
+
+  db.query(q, (err, data) => {
+    if (err) {
+      console.error("Error fetching summary data:", err);
+      return res
+        .status(500)
+        .json({ error: "Database query failed", details: err });
+    }
+    res.json(data[0]);
   });
 });
 
