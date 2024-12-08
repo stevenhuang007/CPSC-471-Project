@@ -56,7 +56,6 @@ app.get("/hand_info", (req, res) => {
       game, 
       amount_bet, 
       amount_won_loss, 
-      dealer_id, 
       DATE_FORMAT(date, '%Y-%m-%d') AS date
     FROM hand_info
   `;
@@ -73,14 +72,13 @@ app.get("/hand_info", (req, res) => {
 
 app.post("/hand_info", (req, res) => {
   const q =
-    "INSERT INTO hand_info (`casino`,`table_id`,`game`,`amount_bet`,`amount_won_loss`,`dealer_id`,`date`) VALUES (?)";
+    "INSERT INTO hand_info (`casino`,`table_id`,`game`,`amount_bet`,`amount_won_loss`,`date`) VALUES (?)";
   const values = [
     req.body.casino,
     req.body.table_id,
     req.body.game,
     req.body.amount_bet,
     req.body.amount_won_loss,
-    req.body.dealer_id,
     req.body.date,
   ];
 
