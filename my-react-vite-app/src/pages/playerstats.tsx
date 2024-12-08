@@ -1,21 +1,24 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-function PlayerStats() {
-  const [playerStats, setplayerStats] = useState([])
+
+const PlayerStats = () => {
+  const [players, setplayerStats] = useState([])
+  const [physical_casino, setPS] = useState([])
 
   useEffect(()=>{
     const fetchAllPS = async()=>{
       try{
         const res = await axios.get("http://localhost:8800/player")
-        console.log(res)
+        setplayerStats(res.data);
+        console.log(res);
       }catch(err){
-        console.log(err)
+        console.log(err);
       }
       
     }
     fetchAllPS()
-  },[])
+  }, [])
 
   return (
     <div>
@@ -30,6 +33,16 @@ function PlayerStats() {
         <p className="text-gray-500 italic">
           Player stats data will be displayed here...
         </p>
+
+        <div>
+          {players.map(player=>(
+            <div>
+             {player.Player_ID}
+            </div>
+          ))}
+        </div>
+      
+             
       </div>
       {/*Centered box*/}
       <div className="flex justify-center mt-6">
@@ -63,6 +76,8 @@ function PlayerStats() {
                 <option value="Black Jack">Black Jack</option>
                 <option value="Poker">Poker</option>
                 <option value="Baccarat">Baccarat</option>
+                <option value="craps">Craps</option>
+                <option value="texas_holdem">Texas Hold'em</option>
               </select>
             </div>
             {/* Machine games select*/}
