@@ -1,6 +1,6 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Information = () => {
   const [hand_info, setHandInfo] = useState({
@@ -16,7 +16,7 @@ const Information = () => {
   const [confirmation, setConfirmation] = useState(""); // State for confirmation message
   const navigate = useNavigate();
 
-  const handleChange = (e: { target: { name: any; value: any; }; }) => {
+  const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
 
     // Validate `amount_bet` input to allow only positive integers
@@ -31,9 +31,17 @@ const Information = () => {
   };
 
   const validateForm = () => {
-    const { casino, table_id, game, amount_bet, amount_won_loss, date } = hand_info;
+    const { casino, table_id, game, amount_bet, amount_won_loss, date } =
+      hand_info;
 
-    if (!casino || !table_id || !game || !amount_bet || !amount_won_loss || !date) {
+    if (
+      !casino ||
+      !table_id ||
+      !game ||
+      !amount_bet ||
+      !amount_won_loss ||
+      !date
+    ) {
       return "All fields except Dealer ID must be filled out.";
     }
 
@@ -44,7 +52,7 @@ const Information = () => {
     return "";
   };
 
-  const handleClick = async (e: { preventDefault: () => void; }) => {
+  const handleClick = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     const errorMessage = validateForm();
     if (errorMessage) {
@@ -56,11 +64,13 @@ const Information = () => {
       await axios.post("http://localhost:8800/hand_info", hand_info);
       setConfirmation("Data entry complete!"); // Set confirmation message
       setTimeout(() => {
-        navigate("/"); // Redirect after showing message
+        navigate("/playerstats"); // Redirect after showing message
       }, 2000); // Redirect after 2 seconds
     } catch (err) {
       console.log(err);
-      setError("An error occurred while submitting the form. Please try again.");
+      setError(
+        "An error occurred while submitting the form. Please try again."
+      );
     }
   };
 
@@ -69,7 +79,8 @@ const Information = () => {
       <div>
         <h1 className="text-3xl font-bold mb-4">Enter Hand Information</h1>
         <p className="text-lg">
-          Here you can enter the results of your hand that will be incorporated into your user database.
+          Here you can enter the results of your hand that will be incorporated
+          into your user database.
         </p>
       </div>
 
@@ -91,7 +102,9 @@ const Information = () => {
         <div className="w-full max-w-xl">
           <div className="grid grid-cols-2 gap-4 items-center mt-5">
             {/* Form inputs and labels */}
-            <label htmlFor="casino" className="text-lg mr-4">Enter Casino:</label>
+            <label htmlFor="casino" className="text-lg mr-4">
+              Enter Casino:
+            </label>
             <select
               onChange={handleChange}
               name="casino"
@@ -106,7 +119,9 @@ const Information = () => {
               <option value="casino5">Casino 5</option>
             </select>
 
-            <label htmlFor="table-machine" className="text-lg mr-4">Enter Table or Machine ID:</label>
+            <label htmlFor="table-machine" className="text-lg mr-4">
+              Enter Table or Machine ID:
+            </label>
             <select
               onChange={handleChange}
               name="table_id"
@@ -124,7 +139,9 @@ const Information = () => {
               <option value="machine4">Machine 4</option>
             </select>
 
-            <label htmlFor="game" className="text-lg mr-4">Enter Game:</label>
+            <label htmlFor="game" className="text-lg mr-4">
+              Enter Game:
+            </label>
             <select
               onChange={handleChange}
               name="game"
@@ -141,7 +158,9 @@ const Information = () => {
               <option value="slots">Slots</option>
             </select>
 
-            <label htmlFor="amount-bet" className="text-lg mr-4">Enter Amount Bet:</label>
+            <label htmlFor="amount-bet" className="text-lg mr-4">
+              Enter Amount Bet:
+            </label>
             <input
               onChange={handleChange}
               name="amount_bet"
@@ -152,7 +171,9 @@ const Information = () => {
               value={hand_info.amount_bet}
             />
 
-            <label htmlFor="amount-w-l" className="text-lg mr-4">Enter Amount Won/Loss:</label>
+            <label htmlFor="amount-w-l" className="text-lg mr-4">
+              Enter Amount Won/Loss:
+            </label>
             <input
               onChange={handleChange}
               name="amount_won_loss"
@@ -162,7 +183,9 @@ const Information = () => {
               placeholder="Winnings/Losings (ex: 5, -5)"
             />
 
-            <label htmlFor="date" className="text-lg mr-4">Enter Date:</label>
+            <label htmlFor="date" className="text-lg mr-4">
+              Enter Date:
+            </label>
             <input
               onChange={handleChange}
               name="date"
@@ -173,7 +196,12 @@ const Information = () => {
             />
           </div>
           <div className="flex justify-center mt-10">
-            <button onClick={handleClick} className="bg-green-400 border-4 border-gray-600 p-2 hover:opacity-80 rounded-full">Submit</button>
+            <button
+              onClick={handleClick}
+              className="bg-green-400 border-4 border-gray-600 p-2 hover:opacity-80 rounded-full"
+            >
+              Submit
+            </button>
           </div>
         </div>
       </div>

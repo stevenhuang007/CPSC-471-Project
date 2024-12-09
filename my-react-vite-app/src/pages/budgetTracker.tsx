@@ -53,6 +53,7 @@ const BudgetTracker: React.FC = () => {
         Amount: parseInt(formData.Amount, 10),
       })
       .then((response) => {
+        // Add the new transaction to the current transactions
         setTransactions((prev) => [
           {
             Id: response.data.id,
@@ -61,9 +62,19 @@ const BudgetTracker: React.FC = () => {
           },
           ...prev,
         ]);
+
+        // Clear the form
         setFormData({ Casino_name: "", Description: "", Amount: "", Date: "" });
+
+        // Re-fetch the summary data
+        return axios.get("http://localhost:8800/tracker/summary");
       })
-      .catch((error) => console.error("Error saving transaction:", error));
+      .then((summaryResponse) => {
+        setSummary(summaryResponse.data); // Update the summary
+      })
+      .catch((error) =>
+        console.error("Error saving transaction or updating summary:", error)
+      );
   };
 
   // Format amount to display as $ for positive and -$ for negative amounts
