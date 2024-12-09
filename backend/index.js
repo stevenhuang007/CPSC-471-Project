@@ -88,11 +88,10 @@ app.post("/hand_info", (req, res) => {
   });
 });
 
-// Pagination logic for fetching transactions
 app.get("/tracker", (req, res) => {
-  const page = parseInt(req.query.page) || 1; // Default to page 1
-  const limit = 4; // Set the limit to 4 entries per page
-  const offset = (page - 1) * limit; // Calculate the offset based on the current page
+  const page = parseInt(req.query.page) || 1;
+  const limit = 4;
+  const offset = (page - 1) * limit;
 
   const query = `
     SELECT 
