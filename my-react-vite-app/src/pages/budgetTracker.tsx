@@ -16,7 +16,7 @@ interface Transaction {
   Date: string;
 }
 
-const BudgetTracker: React.FC = () => {
+const Tracker: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [summary, setSummary] = useState<SummaryData | null>(null);
   const [formData, setFormData] = useState({
@@ -234,4 +234,4 @@ const BudgetTracker: React.FC = () => {
   );
 };
 
-export default BudgetTracker;
+export default Tracker;
