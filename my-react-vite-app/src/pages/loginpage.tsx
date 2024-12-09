@@ -26,7 +26,7 @@ const LoginPage: React.FC<LoginProps> = ({ onLogin }) => {
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-[#FCF5ED] to-[#CE5A67] p-4">
       <div className="w-full max-w-4xl flex rounded-xl overflow-hidden bg-white shadow-xl">
-        {/* Left side - Welcome message */}
+        {/* Left side */}
         <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-[#CE5A67] to-[#1F1717] p-12 flex-col justify-center relative">
           <div className="relative z-10">
             <h1 className="text-4xl font-bold text-white mb-4">
@@ -35,7 +35,6 @@ const LoginPage: React.FC<LoginProps> = ({ onLogin }) => {
             <p className="text-white/80">Sign in to access your account</p>
           </div>
 
-          {/* Decorative elements */}
           <div className="absolute top-8 right-8">
             <div className="w-2 h-2 bg-white/20 rounded-full" />
             <div className="w-2 h-2 bg-white/20 rounded-full mt-2" />

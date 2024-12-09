@@ -22,11 +22,11 @@ const Information = () => {
     // Validate `amount_bet` input to allow only positive integers
     if (name === "amount_bet" && (value === "" || !/^\d+$/.test(value))) {
       setError("Amount Bet must be a positive integer.");
-      setHandInfo((prev) => ({ ...prev, [name]: "" })); // Clear invalid value
+      setHandInfo((prev) => ({ ...prev, [name]: "" }));
       return;
     }
 
-    setError(""); // Clear any error if input is valid
+    setError("");
     setHandInfo((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -56,16 +56,16 @@ const Information = () => {
     e.preventDefault();
     const errorMessage = validateForm();
     if (errorMessage) {
-      setError(errorMessage); // Set error message if validation fails
+      setError(errorMessage);
       return;
     }
-    setError(""); // Clear error if validation passes
+    setError("");
     try {
       await axios.post("http://localhost:8800/hand_info", hand_info);
-      setConfirmation("Data entry complete!"); // Set confirmation message
+      setConfirmation("Data entry complete!");
       setTimeout(() => {
-        navigate("/playerstats"); // Redirect after showing message
-      }, 2000); // Redirect after 2 seconds
+        navigate("/playerstats");
+      }, 2000);
     } catch (err) {
       console.log(err);
       setError(
@@ -164,7 +164,7 @@ const Information = () => {
             <input
               onChange={handleChange}
               name="amount_bet"
-              type="text" // Use "text" for better input validation control
+              type="text"
               id="amount-bet"
               className="p-2 border border-gray-300 rounded-md w-60"
               placeholder="Bet Amount (ex: 5, 10)"
