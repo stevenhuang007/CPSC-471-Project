@@ -171,6 +171,22 @@ app.get("/tracker/summary", (req, res) => {
   });
 });
 
+app.delete("/tracker/:id", (req, res) => {
+  const transactionId = req.params.id;
+
+  const query = "DELETE FROM tracker WHERE Id = ?";
+  db.query(query, [transactionId], (err, results) => {
+    if (err) {
+      console.error("Error deleting transaction:", err);
+      return res.status(500).send("Error deleting transaction");
+    }
+    if (results.affectedRows === 0) {
+      return res.status(404).send("Transaction not found");
+    }
+    res.status(200).send("Transaction deleted successfully");
+  });
+});
+
 app.listen(8800, () => {
   console.log("Connected to backend!");
 });
