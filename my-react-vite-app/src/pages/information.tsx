@@ -14,9 +14,10 @@ const Information = () => {
 
   const [error, setError] = useState(""); // State for error message
   const [confirmation, setConfirmation] = useState(""); // State for confirmation message
+  const [showConfirmation, setShowConfirmation] = useState(false); // State for confirmation modal
   const navigate = useNavigate();
 
-  const handleChange = (e: { target: { name: any; value: any } }) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
 
     // Validate `amount_bet` input to allow only positive integers
@@ -26,7 +27,19 @@ const Information = () => {
       return;
     }
 
-    setError("");
+    // Validate `amount_won_loss` input
+    if (name === "amount_won_loss" && (value === "" || isNaN(value))) {
+      setError("Amount Won/Loss must be a valid number.");
+      return;
+    }
+
+    // Validate `date` input for correct format (YYYY-MM-DD)
+    if (name === "date" && value && !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      setError("Date must be in the format YYYY-MM-DD.");
+      return;
+    }
+
+    setError(""); // Reset error if input is valid
     setHandInfo((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -34,6 +47,7 @@ const Information = () => {
     const { casino, table_id, game, amount_bet, amount_won_loss, date } =
       hand_info;
 
+    // Ensure all required fields are filled
     if (
       !casino ||
       !table_id ||
@@ -45,14 +59,25 @@ const Information = () => {
       return "All fields except Dealer ID must be filled out.";
     }
 
+    // Validate `amount_bet` to be greater than zero
     if (parseInt(amount_bet, 10) <= 0) {
       return "Invalid bet. Amount Bet must be greater than zero.";
+    }
+
+    // Validate `amount_won_loss` to be a valid number (positive or negative)
+    if (isNaN(amount_won_loss)) {
+      return "Amount Won/Loss must be a valid number.";
+    }
+
+    // Validate `date` format
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return "Date must be in the format YYYY-MM-DD.";
     }
 
     return "";
   };
 
-  const handleClick = async (e: { preventDefault: () => void }) => {
+  const handleClick = async (e) => {
     e.preventDefault();
     const errorMessage = validateForm();
     if (errorMessage) {
@@ -60,6 +85,12 @@ const Information = () => {
       return;
     }
     setError("");
+
+    // Show the confirmation modal before submitting
+    setShowConfirmation(true);
+  };
+
+  const handleConfirm = async () => {
     try {
       await axios.post("http://localhost:8800/hand_info", hand_info);
       setConfirmation("Data entry complete!");
@@ -72,6 +103,11 @@ const Information = () => {
         "An error occurred while submitting the form. Please try again."
       );
     }
+    setShowConfirmation(false); // Close confirmation modal
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false); // Close confirmation modal
   };
 
   return (
@@ -95,6 +131,50 @@ const Information = () => {
       {confirmation && (
         <div className="bg-green-200 text-green-800 p-4 rounded-md mb-4">
           {confirmation}
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      {showConfirmation && (
+        <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Confirm Your Information</h2>
+            <p>Please confirm that the information is correct:</p>
+            <ul className="list-disc ml-5 mt-3">
+              <li>
+                <strong>Casino:</strong> {hand_info.casino}
+              </li>
+              <li>
+                <strong>Table/Machine ID:</strong> {hand_info.table_id}
+              </li>
+              <li>
+                <strong>Game:</strong> {hand_info.game}
+              </li>
+              <li>
+                <strong>Amount Bet:</strong> {hand_info.amount_bet}
+              </li>
+              <li>
+                <strong>Amount Won/Loss:</strong> {hand_info.amount_won_loss}
+              </li>
+              <li>
+                <strong>Date:</strong> {hand_info.date}
+              </li>
+            </ul>
+            <div className="flex justify-between mt-6">
+              <button
+                onClick={handleCancel}
+                className="bg-gray-500 text-white px-4 py-2 rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirm}
+                className="bg-green-500 text-white px-4 py-2 rounded-md"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

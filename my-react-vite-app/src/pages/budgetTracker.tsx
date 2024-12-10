@@ -52,29 +52,41 @@ const Tracker: React.FC = () => {
         ...formData,
         Amount: parseInt(formData.Amount, 10),
       })
-      .then((response) => {
-        // Add the new transaction to the current transactions
-        setTransactions((prev) => [
-          {
-            Id: response.data.id,
-            ...formData,
-            Amount: parseInt(formData.Amount, 10),
-          },
-          ...prev,
-        ]);
-
+      .then(() => {
         // Clear the form
         setFormData({ Casino_name: "", Description: "", Amount: "", Date: "" });
 
-        // Re-fetch the summary data
-        return axios.get("http://localhost:8800/tracker/summary");
+        // Re-fetch the transactions and the summary
+        return Promise.all([
+          axios.get(
+            `http://localhost:8800/tracker?page=${currentPage}&limit=4`
+          ),
+          axios.get("http://localhost:8800/tracker/summary"),
+        ]);
       })
-      .then((summaryResponse) => {
+      .then(([transactionsResponse, summaryResponse]) => {
+        setTransactions(transactionsResponse.data.data); // Update the transactions list
         setSummary(summaryResponse.data); // Update the summary
       })
       .catch((error) =>
         console.error("Error saving transaction or updating summary:", error)
       );
+  };
+
+  const handleDelete = (id: number) => {
+    axios
+      .delete(`http://localhost:8800/tracker/${id}`)
+      .then((response) => {
+        console.log("Transaction deleted:", response.data);
+
+        // Remove the deleted transaction from the state
+        setTransactions((prevTransactions) =>
+          prevTransactions.filter((transaction) => transaction.Id !== id)
+        );
+      })
+      .catch((error) => {
+        console.error("Error deleting transaction:", error);
+      });
   };
 
   // Format amount to display as $ for positive and -$ for negative amounts
@@ -206,6 +218,14 @@ const Tracker: React.FC = () => {
               Amount: {formatAmount(transaction.Amount)}
             </p>
             <p className="text-sm">Date: {transaction.Date}</p>
+
+            {/* Delete Button */}
+            <button
+              onClick={() => handleDelete(transaction.Id)}
+              className="bg-red-500 text-white px-4 py-2 rounded mt-2 hover:bg-red-600"
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>
